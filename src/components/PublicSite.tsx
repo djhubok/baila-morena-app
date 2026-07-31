@@ -312,34 +312,42 @@ export default function PublicSite({
             <div className="gallery-editions">
               {sortedGallery.map((g, i) => {
                 const photos = g.gallery_photos.map((p) => p.url);
-                const cover = photos[0];
                 return (
-                  <div
-                    className="edition-card"
-                    key={g.id}
-                    onClick={() => {
-                      if (photos.length) setLightbox({ images: photos, index: 0 });
-                      else if (g.external_link) window.open(g.external_link, '_blank');
-                    }}
-                  >
-                    {cover ? (
-                      <img
-                        src={cover}
-                        alt={g.title}
-                        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-                      />
+                  <div className="edition-card glass" key={g.id}>
+                    <div className="edition-card-head">
+                      <div>
+                        <span className="eyebrow">{String(i + 1).padStart(2, '0')}</span>
+                        <h3>{g.title}</h3>
+                      </div>
+                    </div>
+                    {photos.length > 0 ? (
+                      <div className="edition-photo-grid">
+                        {photos.map((url, idx) => (
+                          <button
+                            key={url}
+                            type="button"
+                            onClick={() => setLightbox({ images: photos, index: idx })}
+                            aria-label={`Ver foto ${idx + 1} de ${g.title}`}
+                          >
+                            <img src={url} alt={`${g.title} — foto ${idx + 1}`} />
+                          </button>
+                        ))}
+                        {Array.from({ length: Math.max(0, 6 - photos.length) }).map((_, k) => (
+                          <div className="empty-slot" key={`empty-${k}`} />
+                        ))}
+                      </div>
                     ) : (
-                      <div className="edition-mosaic">
-                        {Array.from({ length: 12 }).map((_, k) => <div key={k} />)}
+                      <div className="edition-photo-grid">
+                        {Array.from({ length: 6 }).map((_, k) => (
+                          <div className="empty-slot" key={k} />
+                        ))}
                       </div>
                     )}
-                    <div className="edition-overlay">
-                      <span className="eyebrow">{String(i + 1).padStart(2, '0')}</span>
-                      <h3>{g.title}</h3>
-                      <span className="edition-link">
-                        {photos.length ? `Ver ${photos.length} foto${photos.length > 1 ? 's' : ''} →` : g.external_link ? 'Ver galería →' : ''}
-                      </span>
-                    </div>
+                    {g.external_link && (
+                      <a href={g.external_link} target="_blank" rel="noopener noreferrer" className="edition-link">
+                        Ver galería completa →
+                      </a>
+                    )}
                   </div>
                 );
               })}
