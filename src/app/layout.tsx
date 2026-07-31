@@ -21,6 +21,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://baila-morena-app.vercel.app"),
   title: "BAILA MORENA — El reggaetón old school volvió",
   description:
     "La fiesta donde el reggaetón old school vuelve a ser protagonista. Clásicos, nostalgia y una energía única en cada edición.",
@@ -29,6 +30,21 @@ export const metadata: Metadata = {
     description:
       "La fiesta donde el reggaetón old school vuelve a ser protagonista.",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Baila Morena",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "BAILA MORENA",
+    description:
+      "La fiesta donde el reggaetón old school vuelve a ser protagonista.",
+    images: ["/og-image.png"],
   },
 };
 
