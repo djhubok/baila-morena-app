@@ -64,6 +64,7 @@ export default function AdminDashboard({ initial }: Props) {
     date_text: initial.activeEvent?.date_text ?? '',
     event_datetime: toDatetimeLocal(initial.activeEvent?.event_datetime ?? null),
     flyer_url: initial.activeEvent?.flyer_url ?? '',
+    location_embed: initial.activeEvent?.location_embed ?? '',
   });
   const [eventMsg, setEventMsg] = useState('');
   const [flyerUploading, setFlyerUploading] = useState(false);
@@ -92,6 +93,7 @@ export default function AdminDashboard({ initial }: Props) {
       date_text: event.date_text,
       event_datetime: event.event_datetime ? new Date(event.event_datetime).toISOString() : null,
       flyer_url: event.flyer_url,
+      location_embed: event.location_embed,
       is_active: true,
     };
     let error;
@@ -423,7 +425,7 @@ export default function AdminDashboard({ initial }: Props) {
             <label>Fecha y hora exacta (para el contador)</label>
             <input type="datetime-local" value={event.event_datetime} onChange={(e) => setEvent({ ...event, event_datetime: e.target.value })} />
           </div>
-          <div className="field" style={{ marginBottom: 0 }}>
+          <div className="field">
             <label>Imagen del flyer</label>
             <div className="upload-field">
               <input ref={flyerInputRef} type="file" accept="image/*" onChange={handleFlyerUpload} />
@@ -437,6 +439,18 @@ export default function AdminDashboard({ initial }: Props) {
                 )}
               </div>
             </div>
+          </div>
+          <div className="field" style={{ marginBottom: 0 }}>
+            <label>Ubicación (mapa de Google Maps)</label>
+            <div className="hint" style={{ marginTop: 0 }}>
+              En Google Maps: buscá el lugar → <b>Compartir</b> → pestaña <b>&quot;Insertar un mapa&quot;</b> → <b>Copiar HTML</b> → pegalo acá completo.
+            </div>
+            <textarea
+              value={event.location_embed}
+              onChange={(e) => setEvent({ ...event, location_embed: e.target.value })}
+              placeholder='<iframe src="https://www.google.com/maps/embed?pb=..." width="600" height="450" ...></iframe>'
+              rows={3}
+            />
           </div>
           <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', gap: 12 }}>
             <button className="btn btn-solid btn-sm" onClick={saveEvent}>Guardar</button>

@@ -63,6 +63,16 @@ export default function PublicSite({
   const [navOpen, setNavOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<string | null>(null);
   const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null);
+  const [showMap, setShowMap] = useState(false);
+
+  const mapEmbedSrc = useMemo(() => {
+    const raw = activeEvent?.location_embed?.trim();
+    if (!raw) return '';
+    const match = raw.match(/src=["']([^"']+)["']/);
+    if (match) return match[1];
+    if (raw.startsWith('http')) return raw;
+    return '';
+  }, [activeEvent?.location_embed]);
 
   const countdown = useCountdown(activeEvent?.event_datetime ?? null);
 
@@ -104,6 +114,19 @@ export default function PublicSite({
       document.body.style.overflow = '';
     };
   }, [lightbox]);
+
+  useEffect(() => {
+    if (!showMap) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowMap(false);
+    };
+    document.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [showMap]);
 
   const ticketsUrl = siteConfig?.tickets_url || '#';
   const spotifyUrl = siteConfig?.spotify_url || '#';
@@ -253,6 +276,11 @@ export default function PublicSite({
                 <div className="event-ctas">
                   <a href={ticketsUrl} target="_blank" rel="noopener noreferrer" className="btn btn-solid btn-sm">Comprar entradas</a>
                   <a href={calendarUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost btn-sm">Agendar en calendario</a>
+                  {mapEmbedSrc && (
+                    <button type="button" className="btn btn-ghost btn-sm" onClick={() => setShowMap(true)}>
+                      📍 Ver ubicación
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -498,6 +526,24 @@ export default function PublicSite({
         )}
         {lightbox && lightbox.images.length > 1 && (
           <div className="lightbox-counter">{lightbox.index + 1} / {lightbox.images.length}</div>
+        )}
+      </div>
+
+      {/* MAPA DE UBICACIÓN */}
+      <div className={`lightbox ${showMap ? 'open' : ''}`} onClick={(e) => { if (e.target === e.currentTarget) setShowMap(false); }}>
+        <div className="lightbox-close" onClick={() => setShowMap(false)}>&times;</div>
+        {showMap && mapEmbedSrc && (
+          <div style={{ width: '90vw', maxWidth: 900, height: '70vh', borderRadius: 12, overflow: 'hidden' }}>
+            <iframe
+              src={mapEmbedSrc}
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Ubicación del evento"
+            />
+          </div>
         )}
       </div>
     </>

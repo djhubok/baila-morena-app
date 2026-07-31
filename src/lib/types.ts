@@ -22,6 +22,7 @@ export interface EventRow {
   event_datetime: string | null;
   flyer_url: string;
   is_active: boolean;
+  location_embed: string;
 }
 
 export interface GalleryEdition {
