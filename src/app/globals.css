@@ -315,7 +315,7 @@
   .event-meta{display:flex;flex-direction:column;gap:12px;margin-bottom:28px;}
   .event-meta li{display:flex;gap:12px;align-items:center;font-size:14px;color:var(--white);font-family:var(--font-mono);}
   .event-meta li b{color:var(--orange-glow);font-weight:500;min-width:18px;}
-  .event-ctas{display:flex;gap:14px;flex-wrap:wrap;}
+  .event-ctas{display:flex;flex-direction:column;align-items:flex-start;gap:12px;}
   .btn-sm{padding:12px 22px;font-size:12px;}
 
   /* ============ EXPERIENCE GRID ============ */
