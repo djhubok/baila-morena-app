@@ -10,6 +10,8 @@ export interface SiteConfig {
   mesa_back_price: string;
   mesa_vip_price: string;
   mesas_condicion: string;
+  mesa_back_desc: string;
+  mesa_vip_desc: string;
 }
 
 export interface EventRow {

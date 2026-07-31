@@ -425,9 +425,9 @@ export default function PublicSite({
                 <div>
                   <h4>Mesa BACK</h4>
                   <ul>
-                    <li>Mesas 3 a 9</li>
-                    <li>Ubicación lateral, sobre la pista</li>
-                    <li>Ideal para grupos</li>
+                    {(siteConfig?.mesa_back_desc || '').split('\n').filter(Boolean).map((line, i) => (
+                      <li key={i}>{line}</li>
+                    ))}
                   </ul>
                 </div>
                 <div className="vip-price">
@@ -439,9 +439,9 @@ export default function PublicSite({
                 <div>
                   <h4>Mesa VIP</h4>
                   <ul>
-                    <li>Mesas 1 y 2</li>
-                    <li>Ubicación junto al DJ</li>
-                    <li>La mejor vista de la noche</li>
+                    {(siteConfig?.mesa_vip_desc || '').split('\n').filter(Boolean).map((line, i) => (
+                      <li key={i}>{line}</li>
+                    ))}
                   </ul>
                 </div>
                 <div className="vip-price">

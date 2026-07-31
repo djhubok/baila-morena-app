@@ -109,6 +109,8 @@ export default function AdminDashboard({ initial }: Props) {
     mesa_back_price: initial.siteConfig?.mesa_back_price ?? '',
     mesa_vip_price: initial.siteConfig?.mesa_vip_price ?? '',
     mesas_condicion: initial.siteConfig?.mesas_condicion ?? '',
+    mesa_back_desc: initial.siteConfig?.mesa_back_desc ?? '',
+    mesa_vip_desc: initial.siteConfig?.mesa_vip_desc ?? '',
   });
   const [mapUrl, setMapUrl] = useState(initial.mesasMap?.map_url ?? '');
   const [mesasMsg, setMesasMsg] = useState('');
@@ -426,6 +428,26 @@ export default function AdminDashboard({ initial }: Props) {
           <div className="field">
             <label>Condición de consumo</label>
             <input value={mesas.mesas_condicion} onChange={(e) => setMesas({ ...mesas, mesas_condicion: e.target.value })} />
+          </div>
+          <div className="row2">
+            <div className="field">
+              <label>Descripción Mesa BACK (una línea = un punto en el sitio)</label>
+              <textarea
+                value={mesas.mesa_back_desc}
+                onChange={(e) => setMesas({ ...mesas, mesa_back_desc: e.target.value })}
+                placeholder={'Mesas 3 a 9\nUbicación lateral, sobre la pista\nIdeal para grupos'}
+                rows={3}
+              />
+            </div>
+            <div className="field">
+              <label>Descripción Mesa VIP (una línea = un punto en el sitio)</label>
+              <textarea
+                value={mesas.mesa_vip_desc}
+                onChange={(e) => setMesas({ ...mesas, mesa_vip_desc: e.target.value })}
+                placeholder={'Mesas 1 y 2\nUbicación junto al DJ\nLa mejor vista de la noche'}
+                rows={3}
+              />
+            </div>
           </div>
           <div className="field" style={{ marginBottom: 0 }}>
             <label>Imagen del mapa de mesas</label>
