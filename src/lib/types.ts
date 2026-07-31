@@ -58,3 +58,11 @@ export interface FaqRow {
   answer: string;
   sort_order: number;
 }
+
+export interface ExperienceRow {
+  id: string;
+  icon_key: string;
+  title: string;
+  description: string;
+  sort_order: number;
+}

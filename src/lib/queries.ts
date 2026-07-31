@@ -6,6 +6,7 @@ import type {
   VideoRow,
   MesasMap,
   FaqRow,
+  ExperienceRow,
 } from '@/lib/types';
 
 export async function getSiteData() {
@@ -18,6 +19,7 @@ export async function getSiteData() {
     { data: videos },
     { data: mesasMap },
     { data: faqs },
+    { data: experiences },
   ] = await Promise.all([
     supabase.from('site_config').select('*').eq('id', 1).single(),
     supabase
@@ -34,6 +36,7 @@ export async function getSiteData() {
     supabase.from('videos').select('*').order('sort_order', { ascending: true }),
     supabase.from('mesas_map').select('*').eq('id', 1).single(),
     supabase.from('faqs').select('*').order('sort_order', { ascending: true }),
+    supabase.from('experiences').select('*').order('sort_order', { ascending: true }),
   ]);
 
   return {
@@ -43,5 +46,6 @@ export async function getSiteData() {
     videos: (videos ?? []) as VideoRow[],
     mesasMap: mesasMap as MesasMap | null,
     faqs: (faqs ?? []) as FaqRow[],
+    experiences: (experiences ?? []) as ExperienceRow[],
   };
 }

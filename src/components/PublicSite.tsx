@@ -8,7 +8,9 @@ import type {
   VideoRow,
   MesasMap,
   FaqRow,
+  ExperienceRow,
 } from '@/lib/types';
+import { EXPERIENCE_ICONS } from '@/lib/experienceIcons';
 
 interface Props {
   siteConfig: SiteConfig | null;
@@ -17,73 +19,9 @@ interface Props {
   videos: VideoRow[];
   mesasMap: MesasMap | null;
   faqs: FaqRow[];
+  experiences: ExperienceRow[];
 }
 
-const EXPERIENCES = [
-  {
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-        <path d="M9 18V5l11-2v13" />
-        <circle cx="6" cy="18" r="3" />
-        <circle cx="17" cy="16" r="3" />
-      </svg>
-    ),
-    t: 'Reggaetón Old School',
-    d: 'Los clásicos de los 2000 que marcaron una generación.',
-  },
-  {
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-        <path d="M4 8l2-3h12l2 3" />
-        <rect x="3" y="8" width="18" height="12" rx="2" />
-        <circle cx="12" cy="14" r="3.5" />
-      </svg>
-    ),
-    t: 'Fotografía Profesional',
-    d: 'Un equipo capturando cada momento de la noche.',
-  },
-  {
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-        <circle cx="12" cy="12" r="9" />
-        <path d="M8 12h8M12 8v8" />
-      </svg>
-    ),
-    t: 'Golosinas',
-    d: 'Dulces retro para revivir la nostalgia de los 2000.',
-  },
-  {
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-        <path d="M9 18V6l8 3-8 3" />
-        <path d="M4 21h16" />
-      </svg>
-    ),
-    t: 'Shows',
-    d: 'Performances en vivo entre set y set.',
-  },
-  {
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-        <path d="M5 10l1.5-5h11L19 10" />
-        <path d="M4 10h16v3a8 8 0 0 1-16 0v-3z" />
-        <path d="M12 17v4M8 21h8" />
-      </svg>
-    ),
-    t: 'Mesas VIP',
-    d: 'Zonas exclusivas con servicio de botella.',
-  },
-  {
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-        <rect x="4" y="3" width="16" height="10" rx="1" />
-        <path d="M8 21l2-5h4l2 5M9 13v3M15 13v3" />
-      </svg>
-    ),
-    t: 'Ambiente +21',
-    d: 'Una experiencia pensada exclusivamente para adultos.',
-  },
-];
 
 function useCountdown(target: string | null) {
   const [time, setTime] = useState({ d: '00', h: '00', m: '00', s: '00' });
@@ -119,6 +57,7 @@ export default function PublicSite({
   videos,
   mesasMap,
   faqs,
+  experiences,
 }: Props) {
   const [booting, setBooting] = useState(true);
   const [navOpen, setNavOpen] = useState(false);
@@ -307,22 +246,24 @@ export default function PublicSite({
         )}
 
         {/* EXPERIENCIA */}
-        <section id="experiencia" className="reveal">
-          <div className="section-head">
-            <span className="eyebrow">La experiencia</span>
-            <h2>Lo que nos hace diferentes</h2>
-            <p>Cada detalle está pensado para transportarte a la mejor época del reggaetón.</p>
-          </div>
-          <div className="exp-grid">
-            {EXPERIENCES.map((e) => (
-              <div className="exp-card glass" key={e.t}>
-                <div className="exp-icon">{e.icon}</div>
-                <h4>{e.t}</h4>
-                <p>{e.d}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        {experiences.length > 0 && (
+          <section id="experiencia" className="reveal">
+            <div className="section-head">
+              <span className="eyebrow">La experiencia</span>
+              <h2>Lo que nos hace diferentes</h2>
+              <p>Cada detalle está pensado para transportarte a la mejor época del reggaetón.</p>
+            </div>
+            <div className="exp-grid">
+              {experiences.map((e) => (
+                <div className="exp-card glass" key={e.id}>
+                  <div className="exp-icon">{EXPERIENCE_ICONS[e.icon_key] ?? EXPERIENCE_ICONS.star}</div>
+                  <h4>{e.title}</h4>
+                  <p>{e.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* GALERIA */}
         {sortedGallery.length > 0 && (

@@ -11,7 +11,9 @@ import type {
   VideoRow,
   MesasMap,
   FaqRow,
+  ExperienceRow,
 } from '@/lib/types';
+import { EXPERIENCE_ICONS, ICON_OPTIONS, ICON_LABELS } from '@/lib/experienceIcons';
 
 interface Props {
   initial: {
@@ -21,6 +23,7 @@ interface Props {
     videos: VideoRow[];
     mesasMap: MesasMap | null;
     faqs: FaqRow[];
+    experiences: ExperienceRow[];
   };
 }
 
@@ -297,6 +300,40 @@ export default function AdminDashboard({ initial }: Props) {
     router.refresh();
   }
 
+  // ---- EXPERIENCIAS ----
+  const [experiences, setExperiences] = useState(initial.experiences);
+  const [expMsg, setExpMsg] = useState<Record<string, string>>({});
+
+  async function addExperience() {
+    const { data, error } = await supabase
+      .from('experiences')
+      .insert({ icon_key: 'star', title: 'Nueva tarjeta', description: '', sort_order: experiences.length })
+      .select()
+      .single();
+    if (!error && data) setExperiences((e) => [...e, data]);
+  }
+
+  async function removeExperience(id: string) {
+    await supabase.from('experiences').delete().eq('id', id);
+    setExperiences((e) => e.filter((x) => x.id !== id));
+  }
+
+  function updateExperienceField(id: string, field: 'title' | 'description' | 'icon_key', value: string) {
+    setExperiences((e) => e.map((x) => (x.id === id ? { ...x, [field]: value } : x)));
+  }
+
+  async function saveExperience(id: string) {
+    const exp = experiences.find((e) => e.id === id);
+    if (!exp) return;
+    setExpMsg((m) => ({ ...m, [id]: 'Guardando...' }));
+    const { error } = await supabase
+      .from('experiences')
+      .update({ title: exp.title, description: exp.description, icon_key: exp.icon_key })
+      .eq('id', id);
+    setExpMsg((m) => ({ ...m, [id]: error ? 'Error' : 'Guardado ✓' }));
+    setTimeout(() => setExpMsg((m) => ({ ...m, [id]: '' })), 2000);
+  }
+
   return (
     <div className="admin-root">
       <div className="grain" />
@@ -564,6 +601,56 @@ export default function AdminDashboard({ initial }: Props) {
             </div>
           ))}
           <button className="btn btn-ghost btn-sm" onClick={addVideo}>+ Agregar video</button>
+        </div>
+
+        {/* EXPERIENCIA */}
+        <div className="panel">
+          <span className="eyebrow">Experiencia</span>
+          <h3>Tarjetas de &quot;Lo que nos hace diferentes&quot;</h3>
+          <div className="hint">Elegí un ícono, escribí el título y la descripción de cada tarjeta.</div>
+          {experiences.map((exp) => (
+            <div className="list-item" key={exp.id}>
+              <div className="remove" onClick={() => removeExperience(exp.id)}>×</div>
+              <div className="field" style={{ marginBottom: 12 }}>
+                <label>Ícono</label>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                  <div style={{ width: 34, height: 34, color: 'var(--orange)', flexShrink: 0 }}>
+                    {EXPERIENCE_ICONS[exp.icon_key] ?? EXPERIENCE_ICONS.star}
+                  </div>
+                  <select
+                    value={exp.icon_key}
+                    onChange={(e) => updateExperienceField(exp.id, 'icon_key', e.target.value)}
+                    style={{
+                      background: 'rgba(255,255,255,.04)',
+                      border: '1px solid var(--gray)',
+                      color: 'var(--white)',
+                      borderRadius: 10,
+                      padding: '10px 12px',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 14,
+                    }}
+                  >
+                    {ICON_OPTIONS.map((key) => (
+                      <option key={key} value={key}>{ICON_LABELS[key] ?? key}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="field" style={{ marginBottom: 12 }}>
+                <label>Título</label>
+                <input value={exp.title} onChange={(e) => updateExperienceField(exp.id, 'title', e.target.value)} />
+              </div>
+              <div className="field" style={{ marginBottom: 0 }}>
+                <label>Descripción</label>
+                <textarea value={exp.description} onChange={(e) => updateExperienceField(exp.id, 'description', e.target.value)} rows={2} />
+              </div>
+              <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 10 }}>
+                <button className="btn btn-ghost btn-sm" onClick={() => saveExperience(exp.id)}>Guardar</button>
+                <span className="upload-status">{expMsg[exp.id]}</span>
+              </div>
+            </div>
+          ))}
+          <button className="btn btn-ghost btn-sm" onClick={addExperience}>+ Agregar tarjeta</button>
         </div>
 
         {/* FAQ */}
