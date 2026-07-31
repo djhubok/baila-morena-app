@@ -42,7 +42,6 @@ export default function AdminDashboard({ initial }: Props) {
   const [cfg, setCfg] = useState({
     hero_intro: initial.siteConfig?.hero_intro ?? '',
     tickets_url: initial.siteConfig?.tickets_url ?? '',
-    calendar_url: initial.siteConfig?.calendar_url ?? '',
     spotify_url: initial.siteConfig?.spotify_url ?? '',
     social_instagram: initial.siteConfig?.social_instagram ?? '',
     social_tiktok: initial.siteConfig?.social_tiktok ?? '',
@@ -362,20 +361,17 @@ export default function AdminDashboard({ initial }: Props) {
         {/* ENLACES */}
         <div className="panel">
           <span className="eyebrow">Enlaces</span>
-          <h3>Entradas, calendario y Spotify</h3>
+          <h3>Entradas y Spotify</h3>
           <div className="field">
             <label>Link de compra de entradas</label>
             <input value={cfg.tickets_url} onChange={(e) => setCfg({ ...cfg, tickets_url: e.target.value })} placeholder="https://tuentrada.com/..." />
           </div>
-          <div className="row2">
-            <div className="field">
-              <label>Link &quot;Agendar en calendario&quot;</label>
-              <input value={cfg.calendar_url} onChange={(e) => setCfg({ ...cfg, calendar_url: e.target.value })} />
-            </div>
-            <div className="field">
-              <label>Link de Spotify</label>
-              <input value={cfg.spotify_url} onChange={(e) => setCfg({ ...cfg, spotify_url: e.target.value })} />
-            </div>
+          <div className="field">
+            <label>Link de Spotify</label>
+            <input value={cfg.spotify_url} onChange={(e) => setCfg({ ...cfg, spotify_url: e.target.value })} />
+          </div>
+          <div className="hint" style={{ marginTop: -6, marginBottom: 16 }}>
+            El botón &quot;Agendar en calendario&quot; ahora se arma solo, con la fecha, el nombre y el lugar que cargues en &quot;Datos del evento&quot; — no hace falta configurarlo acá.
           </div>
 
           <span className="eyebrow" style={{ marginTop: 10 }}>Redes sociales</span>
