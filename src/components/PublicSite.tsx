@@ -131,21 +131,6 @@ export default function PublicSite({
   const ticketsUrl = siteConfig?.tickets_url || '#';
   const spotifyUrl = siteConfig?.spotify_url || '#';
 
-  const calendarUrl = useMemo(() => {
-    if (!activeEvent?.event_datetime) return '#';
-    const start = new Date(activeEvent.event_datetime);
-    const end = new Date(start.getTime() + 5 * 60 * 60 * 1000); // duración estimada: 5 hs
-    const toUTC = (d: Date) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-    const params = new URLSearchParams({
-      action: 'TEMPLATE',
-      text: `Baila Morena — ${activeEvent.name}`,
-      dates: `${toUTC(start)}/${toUTC(end)}`,
-      details: 'La fiesta donde el reggaetón old school vuelve a ser protagonista.',
-      location: activeEvent.venue || '',
-    });
-    return `https://calendar.google.com/calendar/render?${params.toString()}`;
-  }, [activeEvent]);
-
   const [spotifyMeta, setSpotifyMeta] = useState<{ title: string; image: string } | null>(null);
   useEffect(() => {
     if (!spotifyUrl || spotifyUrl === '#') {
@@ -275,7 +260,6 @@ export default function PublicSite({
                 </ul>
                 <div className="event-ctas">
                   <a href={ticketsUrl} target="_blank" rel="noopener noreferrer" className="btn btn-solid btn-sm">Comprar entradas</a>
-                  <a href={calendarUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost btn-sm">Agendar en calendario</a>
                   {mapEmbedSrc && (
                     <button type="button" className="btn btn-ghost btn-sm" onClick={() => setShowMap(true)}>
                       📍 Ver ubicación

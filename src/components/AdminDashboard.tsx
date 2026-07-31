@@ -52,7 +52,7 @@ export default function AdminDashboard({ initial }: Props) {
   async function saveCfg() {
     setCfgMsg('Guardando...');
     const { error } = await supabase.from('site_config').update(cfg).eq('id', 1);
-    setCfgMsg(error ? 'Error al guardar.' : 'Guardado ✓');
+    setCfgMsg(error ? `Error: ${error.message}` : 'Guardado ✓');
     setTimeout(() => setCfgMsg(''), 2500);
   }
 
@@ -104,7 +104,7 @@ export default function AdminDashboard({ initial }: Props) {
       error = res.error;
       if (res.data) setEvent((s) => ({ ...s, id: res.data.id }));
     }
-    setEventMsg(error ? 'Error al guardar.' : 'Guardado ✓');
+    setEventMsg(error ? `Error: ${error.message}` : 'Guardado ✓');
     setTimeout(() => setEventMsg(''), 2500);
   }
 
@@ -142,7 +142,7 @@ export default function AdminDashboard({ initial }: Props) {
       supabase.from('site_config').update(mesas).eq('id', 1),
       supabase.from('mesas_map').update({ map_url: mapUrl }).eq('id', 1),
     ]);
-    setMesasMsg(r1.error || r2.error ? 'Error al guardar.' : 'Guardado ✓');
+    setMesasMsg(r1.error || r2.error ? `Error: ${(r1.error || r2.error)?.message}` : 'Guardado ✓');
     setTimeout(() => setMesasMsg(''), 2500);
   }
 
@@ -176,7 +176,7 @@ export default function AdminDashboard({ initial }: Props) {
       .from('gallery_editions')
       .update({ title: edition.title, external_link: edition.external_link })
       .eq('id', id);
-    setGalleryMsg((m) => ({ ...m, [id]: error ? 'Error' : 'Guardado ✓' }));
+    setGalleryMsg((m) => ({ ...m, [id]: error ? `Error: ${error.message}` : 'Guardado ✓' }));
     setTimeout(() => setGalleryMsg((m) => ({ ...m, [id]: '' })), 2000);
   }
 
@@ -246,7 +246,7 @@ export default function AdminDashboard({ initial }: Props) {
       .from('videos')
       .update({ label: video.label, link: video.link, thumbnail_url: video.thumbnail_url })
       .eq('id', id);
-    setVideoMsg((m) => ({ ...m, [id]: error ? 'Error' : 'Guardado ✓' }));
+    setVideoMsg((m) => ({ ...m, [id]: error ? `Error: ${error.message}` : 'Guardado ✓' }));
     setTimeout(() => setVideoMsg((m) => ({ ...m, [id]: '' })), 2000);
   }
 
@@ -291,7 +291,7 @@ export default function AdminDashboard({ initial }: Props) {
       .from('faqs')
       .update({ question: faq.question, answer: faq.answer })
       .eq('id', id);
-    setFaqMsg((m) => ({ ...m, [id]: error ? 'Error' : 'Guardado ✓' }));
+    setFaqMsg((m) => ({ ...m, [id]: error ? `Error: ${error.message}` : 'Guardado ✓' }));
     setTimeout(() => setFaqMsg((m) => ({ ...m, [id]: '' })), 2000);
   }
 
@@ -331,7 +331,7 @@ export default function AdminDashboard({ initial }: Props) {
       .from('experiences')
       .update({ title: exp.title, description: exp.description, icon_key: exp.icon_key })
       .eq('id', id);
-    setExpMsg((m) => ({ ...m, [id]: error ? 'Error' : 'Guardado ✓' }));
+    setExpMsg((m) => ({ ...m, [id]: error ? `Error: ${error.message}` : 'Guardado ✓' }));
     setTimeout(() => setExpMsg((m) => ({ ...m, [id]: '' })), 2000);
   }
 
