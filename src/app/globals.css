@@ -389,7 +389,7 @@
 
   /* ============ PLAYLIST ============ */
   .playlist-panel{max-width:760px;margin:0 auto;padding:34px;display:flex;gap:26px;align-items:center;flex-wrap:wrap;}
-  .playlist-art{width:96px;height:96px;border-radius:14px;flex-shrink:0;
+  .playlist-art{width:96px;height:96px;border-radius:14px;flex-shrink:0;object-fit:cover;display:block;
     background:conic-gradient(from 120deg,#ff6a00,#1b1512 60%,#ff9a4d);}
   .playlist-info h4{font-family:var(--font-display);font-size:20px;text-transform:uppercase;margin-bottom:6px;}
   .playlist-info p{font-size:13px;color:var(--gray-light);margin-bottom:14px;}

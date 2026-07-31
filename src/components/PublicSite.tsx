@@ -170,6 +170,28 @@ export default function PublicSite({
   const calendarUrl = siteConfig?.calendar_url || '#';
   const spotifyUrl = siteConfig?.spotify_url || '#';
 
+  const [spotifyMeta, setSpotifyMeta] = useState<{ title: string; image: string } | null>(null);
+  useEffect(() => {
+    if (!spotifyUrl || spotifyUrl === '#') {
+      setSpotifyMeta(null);
+      return;
+    }
+    let cancelled = false;
+    fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(spotifyUrl)}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!cancelled && data?.title) {
+          setSpotifyMeta({ title: data.title, image: data.thumbnail_url });
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setSpotifyMeta(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [spotifyUrl]);
+
   const sortedGallery = useMemo(
     () =>
       [...gallery].map((g) => ({
@@ -207,7 +229,7 @@ export default function PublicSite({
           <a href="#vip">Mesas VIP</a>
           <a href="#faq">FAQ</a>
         </nav>
-        <a href={ticketsUrl} className="nav-cta">Comprar entradas</a>
+        <a href={ticketsUrl} target="_blank" rel="noopener noreferrer" className="nav-cta">Comprar entradas</a>
         <button className="nav-toggle" onClick={() => setNavOpen((v) => !v)}>☰</button>
       </header>
 
@@ -223,7 +245,7 @@ export default function PublicSite({
             <h1>Donde los <span>clásicos</span> vuelven.</h1>
             {siteConfig?.hero_intro && <p className="sub">{siteConfig.hero_intro}</p>}
             <div className="hero-ctas">
-              <a href={ticketsUrl} className="btn btn-solid">🎟 Comprar entradas</a>
+              <a href={ticketsUrl} target="_blank" rel="noopener noreferrer" className="btn btn-solid">🎟 Comprar entradas</a>
               <a href="#vip" className="btn btn-ghost">🍾 Reservar mesa</a>
             </div>
           </div>
@@ -276,8 +298,8 @@ export default function PublicSite({
                   <li><b>📍</b> {activeEvent.venue}</li>
                 </ul>
                 <div className="event-ctas">
-                  <a href={ticketsUrl} className="btn btn-solid btn-sm">Comprar entradas</a>
-                  <a href={calendarUrl} className="btn btn-ghost btn-sm">Agendar en calendario</a>
+                  <a href={ticketsUrl} target="_blank" rel="noopener noreferrer" className="btn btn-solid btn-sm">Comprar entradas</a>
+                  <a href={calendarUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost btn-sm">Agendar en calendario</a>
                 </div>
               </div>
             </div>
@@ -438,11 +460,15 @@ export default function PublicSite({
             <h2>Precalentá antes de la fiesta</h2>
           </div>
           <div className="playlist-panel glass">
-            <div className="playlist-art" />
+            {spotifyMeta?.image ? (
+              <img src={spotifyMeta.image} alt={spotifyMeta.title} className="playlist-art" />
+            ) : (
+              <div className="playlist-art" />
+            )}
             <div className="playlist-info">
-              <h4>Baila Morena — Old School Mix</h4>
+              <h4>{spotifyMeta?.title || 'Baila Morena — Old School Mix'}</h4>
               <p>Los clásicos del reggaetón 2000s que sonarán en la pista.</p>
-              <a href={spotifyUrl} className="btn btn-solid btn-sm">Escuchar en Spotify</a>
+              <a href={spotifyUrl} target="_blank" rel="noopener noreferrer" className="btn btn-solid btn-sm">Escuchar en Spotify</a>
             </div>
           </div>
         </section>
