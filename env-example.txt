@@ -1,0 +1,11 @@
+Estas son las variables de entorno que necesita el proyecto.
+
+En tu compu, para probar localmente, creá un archivo llamado ".env.local"
+en la raíz del proyecto (mismo nivel que package.json) con este contenido:
+
+NEXT_PUBLIC_SUPABASE_URL=https://ooawipxancwnujhbnkcn.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_PwJDFIaftw7KxxOZIEwCgw_RDWmXAWx
+
+En Vercel, estas mismas dos variables se configuran desde:
+Project → Settings → Environment Variables
+(ver el paso a paso en README.md)
